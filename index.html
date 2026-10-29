@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#030407">
+  <title>Admin Panel • HACKING BOT BD</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --a: #ff0033;
+      --ad: rgba(255, 0, 51, 0.12);
+      --ab: rgba(255, 0, 51, 0.38);
+      --brda: rgba(255, 0, 51, 0.35);
+      --bg: #030407;
+      --card-bg: rgba(9, 11, 20, 0.78);
+      --txt: #eef0f8;
+      --muted: #9598b3;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --green: #34d399;
+      --wa: #25D366;
+    }
+
+    html { font-size: 15px; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      min-height: 100vh;
+      padding: 18px 14px 90px;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background:
+        radial-gradient(circle 700px at 50% -10%, var(--ad) 0%, transparent 70%),
+        radial-gradient(circle 500px at 85% 80%, rgba(255,0,51,0.05) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+      transform: translateZ(0);
+    }
+
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,0,51,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,51,0.02) 1px, transparent 1px);
+      background-size: 48px 48px; pointer-events: none; z-index: 0;
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 40%, transparent 100%);
+      transform: translateZ(0);
+    }
+
+    .wrap { position: relative; z-index: 10; width: 100%; max-width: 540px; margin: 0 auto; }
+
+    /* HEADER */
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; padding: 0 2px; gap: 10px;
+    }
+    .admin-header .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .admin-header .logo {
+      width: 40px; height: 40px; border-radius: 12px;
+      border: 1.5px solid var(--brda); overflow: hidden;
+      box-shadow: 0 0 18px var(--ad); flex-shrink: 0;
+    }
+    .admin-header .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .admin-header h1 {
+      font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 900;
+      letter-spacing: 0.1em; color: #fff; line-height: 1.15;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .admin-header .sub {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.56rem;
+      color: var(--muted); letter-spacing: 0.08em; margin-top: 2px;
+    }
+    .conn-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 99px;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.56rem;
+      letter-spacing: 0.04em; border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03); color: var(--muted); flex-shrink: 0;
+    }
+    .conn-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+    .conn-badge.ok { color: var(--green); border-color: rgba(52,211,153,0.3); }
+    .conn-badge.ok .dot { background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulseDot 1.6s ease-in-out infinite; }
+    .conn-badge.err { color: var(--a); border-color: var(--brda); }
+    .conn-badge.err .dot { background: var(--a); }
+    @keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: 5px; margin-bottom: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; padding: 4px;
+    }
+    .tab {
+      flex: 1; padding: 10px 6px; border: none; background: transparent;
+      color: var(--muted); font-family: 'Orbitron', monospace;
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em;
+      border-radius: 10px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; gap: 5px;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+      touch-action: manipulation;
+    }
+    .tab i { font-size: 0.92rem; }
+    .tab.active {
+      background: linear-gradient(135deg, var(--a) 0%, #b30024 100%);
+      color: #fff; box-shadow: 0 0 16px var(--ab);
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 18px 16px;
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 16px 40px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative; overflow: hidden; animation: fadeUp 0.4s var(--ease);
+      margin-bottom: 14px;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ab) 50%, transparent);
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    .card-title {
+      font-family: 'Orbitron', monospace; font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 0.08em; color: #fff; margin-bottom: 3px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .card-title i { color: var(--a); font-size: 1rem; }
+    .card-desc {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.62rem;
+      color: var(--muted); letter-spacing: 0.03em; margin-bottom: 14px; line-height: 1.5;
+    }
+
+    /* FORM */
+    .field { margin-bottom: 12px; }
+    .field label {
+      display: block; font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 5px;
+    }
+    .field .input-wrap { position: relative; display: flex; align-items: center; }
+    .field .input-icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,0,51,0.5); font-size: 0.95rem; pointer-events: none; transition: color 0.2s;
+    }
+    .field input, .field textarea {
+      width: 100%; padding: 11px 12px 11px 36px;
+      background: rgba(10,12,22,0.8);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 11px;
+      color: #fff; font-family: 'Rajdhani', sans-serif;
+      font-size: 0.88rem; font-weight: 600; outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s; -webkit-appearance: none;
+    }
+    .field textarea {
+      resize: vertical; min-height: 66px;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.74rem;
+      line-height: 1.5; padding-top: 11px;
+    }
+    .field input::placeholder, .field textarea::placeholder {
+      color: rgba(149,152,179,0.5); font-weight: 500;
+    }
+    .field input:focus, .field textarea:focus {
+      border-color: var(--a); box-shadow: 0 0 0 3px var(--ad), 0 0 14px var(--ad);
+    }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+    .grid-3 .field { margin-bottom: 0; }
+
+    /* Password field special */
+    .pwd-field-wrap {
+      display: flex; gap: 6px;
+    }
+    .pwd-field-wrap .input-wrap { flex: 1; }
+    .pwd-gen-btn {
+      padding: 0 11px; border-radius: 11px;
+      border: 1px solid rgba(255,204,0,0.4);
+      background: rgba(255,204,0,0.1);
+      color: #ffcc00; font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; gap: 4px;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0; touch-action: manipulation;
+    }
+    .pwd-gen-btn:hover { background: rgba(255,204,0,0.2); border-color: rgba(255,204,0,0.6); }
+    .pwd-gen-btn i { font-size: 0.85rem; }
+
+    /* Toggle */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 12px; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 11px; margin-bottom: 12px;
+    }
+    .toggle-row .toggle-label { display: flex; flex-direction: column; gap: 2px; }
+    .toggle-row .toggle-label strong {
+      font-family: 'Orbitron', monospace; font-size: 0.68rem; color: #fff; letter-spacing: 0.04em;
+    }
+    .toggle-row .toggle-label small {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.56rem; color: var(--muted);
+    }
+    .switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; cursor: pointer; }
+    .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .switch .slider {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.12);
+      border-radius: 99px; transition: background 0.25s;
+    }
+    .switch .slider::before {
+      content: ''; position: absolute; width: 18px; height: 18px;
+      left: 3px; top: 3px; border-radius: 50%; background: #fff;
+      transition: transform 0.3s var(--ease);
+    }
+    .switch input:checked + .slider {
+      background: linear-gradient(135deg, var(--a), #b30024);
+      box-shadow: 0 0 14px var(--ab);
+    }
+    .switch input:checked + .slider::before { transform: translateX(20px); }
+
+    /* BUTTONS */
+    .btn-row { display: flex; gap: 8px; margin-top: 16px; }
+    .btn {
+      flex: 1; padding: 12px 10px; border: none; border-radius: 12px;
+      font-family: 'Orbitron', monospace; font-size: 0.68rem; font-weight: 800;
+      letter-spacing: 0.06em; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; gap: 7px;
+      transition: transform 0.2s var(--ease), box-shadow 0.25s var(--ease), opacity 0.2s;
+      touch-action: manipulation;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--a) 0%, #b30024 100%);
+      color: #fff; box-shadow: 0 0 24px var(--ab), inset 0 1px 0 rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,0,51,0.7);
+    }
+    .btn-primary:hover:not(:disabled) { box-shadow: 0 0 36px var(--ab); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.05); color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .btn-secondary:hover:not(:disabled) { color: #fff; border-color: var(--brda); background: var(--ad); }
+    .btn i { font-size: 0.95rem; }
+    .btn .spin { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* STATUS */
+    .status-msg {
+      margin-top: 12px; padding: 10px 12px; border-radius: 11px;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.68rem;
+      line-height: 1.5; display: none; align-items: flex-start; gap: 7px;
+      animation: fadeUp 0.3s var(--ease);
+    }
+    .status-msg.show { display: flex; }
+    .status-msg.ok { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: var(--green); }
+    .status-msg.err { background: var(--ad); border: 1px solid var(--brda); color: #ff7788; }
+    .status-msg.info { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.3); color: #60a5fa; }
+    .status-msg i { font-size: 0.95rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* APP LIST */
+    .app-list { margin-top: 2px; }
+    .app-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px; margin-bottom: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 13px;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .app-item:last-child { margin-bottom: 0; }
+    .app-item:hover { border-color: var(--brda); background: rgba(255,0,51,0.04); }
+    .app-item .app-icon {
+      width: 44px; height: 44px; border-radius: 11px;
+      object-fit: cover; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,0,51,0.1);
+    }
+    .app-item .app-meta { flex: 1; min-width: 0; }
+    .app-item .app-name {
+      font-family: 'Orbitron', monospace; font-size: 0.72rem;
+      font-weight: 700; color: #fff; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .app-item .app-name .lock-icon {
+      color: #ffcc00; font-size: 0.75rem; flex-shrink: 0;
+    }
+    .app-item .app-sub {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.56rem;
+      color: var(--muted); white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
+    }
+    .app-item .app-actions { display: flex; gap: 5px; flex-shrink: 0; }
+    .icon-btn {
+      width: 32px; height: 32px; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted); display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+      font-size: 0.9rem; touch-action: manipulation;
+    }
+    .icon-btn:hover { color: #fff; border-color: var(--brda); background: var(--ad); }
+    .icon-btn.del:hover { color: #fff; background: rgba(255,0,51,0.3); border-color: var(--a); }
+    .empty-list {
+      text-align: center; padding: 22px 14px;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.66rem;
+      color: var(--muted); background: rgba(255,255,255,0.02);
+      border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;
+    }
+    .empty-list i {
+      display: block; font-size: 1.8rem;
+      color: rgba(255,0,51,0.4); margin-bottom: 8px;
+    }
+
+    /* AD/PROFILE PREVIEW */
+    .ad-preview { margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); }
+    .ad-preview-label {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.52rem;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 0.15em;
+      margin-bottom: 7px; display: block;
+    }
+    .ad-preview-card {
+      display: flex; align-items: center; gap: 11px;
+      padding: 11px 13px; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;
+      pointer-events: none;
+    }
+    .ad-preview-card img {
+      width: 40px; height: 40px; border-radius: 9px;
+      object-fit: cover; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+    }
+    .ad-preview-card .ap-text { flex: 1; text-align: left; min-width: 0; }
+    .ad-preview-card .ap-title {
+      font-family: 'Orbitron', monospace; font-size: 0.68rem; font-weight: 700;
+      color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ad-preview-card .ap-desc {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;
+    }
+    .ad-preview-card .ap-arrow { color: var(--a); font-size: 1rem; flex-shrink: 0; opacity: 0.7; }
+    .ad-empty {
+      text-align: center; padding: 14px;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.64rem;
+      color: var(--muted); background: rgba(255,255,255,0.02);
+      border: 1px dashed rgba(255,255,255,0.1); border-radius: 11px;
+    }
+    .profile-preview {
+      display: flex; align-items: center; gap: 11px;
+      padding: 12px 14px; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;
+      margin-top: 14px;
+    }
+    .profile-preview .pp-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+      border: 2px solid var(--brda);
+      box-shadow: 0 0 16px var(--ad);
+    }
+    .profile-preview .pp-info { flex: 1; min-width: 0; }
+    .profile-preview .pp-name {
+      font-family: 'Orbitron', monospace; font-size: 0.74rem; font-weight: 800;
+      color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .profile-preview .pp-user {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.58rem;
+      color: var(--a); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .hidden { display: none !important; }
+
+    /* TOAST */
+    #toastBox {
+      position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+      z-index: 9999; display: flex; flex-direction: column; align-items: center;
+      gap: 7px; pointer-events: none; width: 100%; max-width: 360px; padding: 0 14px;
+    }
+    .toast-item {
+      background: rgba(11,13,24,0.97); border: 1px solid rgba(255,255,255,0.08);
+      border-left: 3px solid var(--a); border-radius: 11px;
+      padding: 10px 14px; font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.3px; color: #fff;
+      display: flex; align-items: center; gap: 8px;
+      transform: translateY(14px); opacity: 0;
+      transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.85); width: 100%;
+    }
+    .toast-item.show { transform: translateY(0); opacity: 1; }
+    .toast-item i { color: var(--a); font-size: 0.95rem; flex-shrink: 0; }
+    .toast-item.ok { border-left-color: var(--green); }
+    .toast-item.ok i { color: var(--green); }
+
+    /* LOADING */
+    .loading-overlay {
+      position: fixed; inset: 0; background: rgba(3,4,7,0.85);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      z-index: 5000; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+    }
+    .loading-overlay.show { opacity: 1; visibility: visible; }
+    .loading-spinner {
+      width: 44px; height: 44px; border: 3px solid rgba(255,0,51,0.2);
+      border-top-color: var(--a); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .loading-text {
+      font-family: 'Orbitron', monospace; font-size: 0.72rem;
+      color: var(--muted); letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 420px) {
+      body { padding: 14px 12px 80px; }
+      .admin-header h1 { font-size: 0.82rem; }
+      .admin-header .logo { width: 36px; height: 36px; border-radius: 10px; }
+      .tab { font-size: 0.54rem; padding: 9px 4px; gap: 4px; }
+      .tab i { font-size: 0.82rem; }
+      .card { padding: 15px 13px; border-radius: 18px; }
+      .btn { font-size: 0.62rem; padding: 11px 8px; }
+      .field input, .field textarea { font-size: 0.82rem; padding: 10px 10px 10px 34px; }
+      .field .input-icon { left: 10px; font-size: 0.85rem; }
+      .app-item { padding: 9px; gap: 8px; }
+      .app-item .app-icon { width: 38px; height: 38px; border-radius: 9px; }
+      .app-item .app-name { font-size: 0.66rem; }
+      .icon-btn { width: 28px; height: 28px; font-size: 0.82rem; }
+      .pwd-gen-btn { font-size: 0.52rem; padding: 0 9px; }
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      button, a, input, textarea { touch-action: manipulation; }
+      #appListCard { content-visibility: auto; contain-intrinsic-size: 0 300px; }
+    }
+
+    ::selection { background: var(--a); color: #fff; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--a); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <div id="toastBox"></div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">Connecting to Firebase...</div>
+  </div>
+
+  <div class="wrap">
+
+    <header class="admin-header">
+      <div class="brand">
+        <div class="logo">
+          <img src="https://files.catbox.moe/werqf8.png" alt="Logo" id="headerLogo">
+        </div>
+        <div>
+          <h1>ADMIN PANEL</h1>
+          <div class="sub">HACKING BOT BD</div>
+        </div>
+      </div>
+      <div class="conn-badge" id="connBadge">
+        <span class="dot"></span>
+        <span id="connText">Connecting</span>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="apps" id="tabApps">
+        <i class="ti ti-apps"></i> <span>Apps</span>
+      </button>
+      <button class="tab" data-tab="profile" id="tabProfile">
+        <i class="ti ti-user-circle"></i> <span>Profile</span>
+      </button>
+      <button class="tab" data-tab="ad" id="tabAd">
+        <i class="ti ti-ad-2"></i> <span>Ad</span>
+      </button>
+    </div>
+
+    <!-- APPS PANEL -->
+    <div id="panelApps">
+
+      <div class="card">
+        <div class="card-title">
+          <i class="ti ti-plus"></i> <span id="formTitle">Add New APK</span>
+        </div>
+        <p class="card-desc" id="formHint">Fill in details to add a new app. Set a password to lock downloads.</p>
+
+        <input type="hidden" id="editId" value="">
+
+        <div class="field">
+          <label for="inAppName">App Name</label>
+          <div class="input-wrap">
+            <i class="ti ti-app-window input-icon"></i>
+            <input type="text" id="inAppName" placeholder="My Cool App" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="inApkUrl">APK Download URL</label>
+          <div class="input-wrap">
+            <i class="ti ti-link input-icon"></i>
+            <input type="url" id="inApkUrl" placeholder="https://example.com/app.apk" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="field">
+            <label for="inSize">Size</label>
+            <div class="input-wrap">
+              <i class="ti ti-database input-icon"></i>
+              <input type="text" id="inSize" placeholder="10 MB" autocomplete="off">
+            </div>
+          </div>
+          <div class="field">
+            <label for="inAndroid">Android</label>
+            <div class="input-wrap">
+              <i class="ti ti-brand-android input-icon"></i>
+              <input type="text" id="inAndroid" placeholder="16+" autocomplete="off">
+            </div>
+          </div>
+          <div class="field">
+            <label for="inArch">Arch</label>
+            <div class="input-wrap">
+              <i class="ti ti-cpu input-icon"></i>
+              <input type="text" id="inArch" placeholder="ARM64" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:12px;">
+          <label for="inIconUrl">Icon Image URL</label>
+          <div class="input-wrap">
+            <i class="ti ti-photo input-icon"></i>
+            <input type="url" id="inIconUrl" placeholder="https://example.com/icon.png" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Password field (optional) -->
+        <div class="field">
+          <label for="inPassword">Password (optional — leave empty for free download)</label>
+          <div class="pwd-field-wrap">
+            <div class="input-wrap">
+              <i class="ti ti-key input-icon" style="color:rgba(255,204,0,0.6);"></i>
+              <input type="text" id="inPassword" placeholder="Set a password to lock this app" autocomplete="off">
+            </div>
+            <button class="pwd-gen-btn" id="btnGenPwd" title="Generate random password">
+              <i class="ti ti-dice"></i> GEN
+            </button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" id="btnClearForm">
+            <i class="ti ti-eraser"></i> Clear
+          </button>
+          <button class="btn btn-primary" id="btnSaveApp">
+            <i class="ti ti-cloud-upload"></i> <span id="saveBtnLabel">Add App</span>
+          </button>
+        </div>
+
+        <div class="status-msg" id="statusApp"></div>
+      </div>
+
+      <div class="card" id="appListCard">
+        <div class="card-title">
+          <i class="ti ti-list"></i> Installed Apps
+          <span id="appCountBadge" style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);font-weight:400;"></span>
+        </div>
+        <p class="card-desc">All apps published on the public page. Locked apps show a 🔒 icon.</p>
+
+        <div class="app-list" id="appList">
+          <div class="empty-list">Loading apps...</div>
+        </div>
+
+        <div class="status-msg" id="statusList"></div>
+      </div>
+
+    </div>
+
+    <!-- PROFILE PANEL -->
+    <div class="card hidden" id="panelProfile">
+      <div class="card-title">
+        <i class="ti ti-user-circle"></i> Profile Settings
+      </div>
+      <p class="card-desc">These values appear at the top of the public download page.</p>
+
+      <div class="field">
+        <label for="inPfName">Display Name</label>
+        <div class="input-wrap">
+          <i class="ti ti-user input-icon"></i>
+          <input type="text" id="inPfName" placeholder="HACKING BOT BD" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inPfLogo">Profile Picture URL</label>
+        <div class="input-wrap">
+          <i class="ti ti-photo input-icon"></i>
+          <input type="url" id="inPfLogo" placeholder="https://example.com/avatar.png" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inPfTelegram">Telegram Handle / URL</label>
+        <div class="input-wrap">
+          <i class="ti ti-brand-telegram input-icon"></i>
+          <input type="text" id="inPfTelegram" placeholder="HackingBotBd or https://t.me/HackingBotBd" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inPfWhatsApp">WhatsApp Number (for password requests)</label>
+        <div class="input-wrap">
+          <i class="ti ti-brand-whatsapp input-icon" style="color:rgba(37,211,102,0.6);"></i>
+          <input type="tel" id="inPfWhatsApp" placeholder="01349237301 or 8801349237301" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inPfBio">Bio (single line)</label>
+        <div class="input-wrap">
+          <i class="ti ti-text-caption input-icon"></i>
+          <input type="text" id="inPfBio" placeholder="Premium secure APK mirror..." autocomplete="off" maxlength="120">
+        </div>
+      </div>
+
+      <span class="ad-preview-label" style="margin-top:8px;display:block;">Live Preview</span>
+      <div class="profile-preview" id="profilePreview">
+        <img class="pp-avatar" id="ppAvatar" src="https://files.catbox.moe/werqf8.png" alt="Avatar"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2746%27 height=%2746%27%3E%3Crect width=%2746%27 height=%2746%27 fill=%27%23070810%27/%3E%3Ctext x=%2723%27 y=%2729%27 text-anchor=%27middle%27 fill=%27%23ff0033%27 font-size=%2716%27 font-family=%27monospace%27 font-weight=%27bold%27%3EHB%3C/text%3E%3C/svg%3E'">
+        <div class="pp-info">
+          <div class="pp-name" id="ppName">HACKING BOT BD</div>
+          <div class="pp-user" id="ppUser">@HackingBotBd</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnReloadProfile">
+          <i class="ti ti-refresh"></i> Reload
+        </button>
+        <button class="btn btn-primary" id="btnSaveProfile">
+          <i class="ti ti-cloud-upload"></i> Save
+        </button>
+      </div>
+
+      <div class="status-msg" id="statusProfile"></div>
+    </div>
+
+    <!-- AD PANEL -->
+    <div class="card hidden" id="panelAd">
+      <div class="card-title">
+        <i class="ti ti-ad-2"></i> Ad Slot Configuration
+      </div>
+      <p class="card-desc">This sponsored card appears below the app list on the public page.</p>
+
+      <div class="toggle-row">
+        <div class="toggle-label">
+          <strong>Enable Ad</strong>
+          <small>Show ad on the download page</small>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="inAdActive">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="inAdTitle">Ad Title</label>
+        <div class="input-wrap">
+          <i class="ti ti-heading input-icon"></i>
+          <input type="text" id="inAdTitle" placeholder="Sponsored Offer" autocomplete="off" maxlength="60">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inAdDesc">Ad Description</label>
+        <div class="input-wrap">
+          <i class="ti ti-text-caption input-icon"></i>
+          <input type="text" id="inAdDesc" placeholder="Tap to learn more" autocomplete="off" maxlength="80">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inAdUrl">Ad Click URL</label>
+        <div class="input-wrap">
+          <i class="ti ti-external-link input-icon"></i>
+          <input type="url" id="inAdUrl" placeholder="https://example.com/offer" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inAdImage">Ad Image URL</label>
+        <div class="input-wrap">
+          <i class="ti ti-photo input-icon"></i>
+          <input type="url" id="inAdImage" placeholder="https://example.com/ad-image.png" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="ad-preview">
+        <span class="ad-preview-label">Live Preview</span>
+        <div id="adPreviewBox">
+          <div class="ad-empty">No ad configured</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnReloadAd">
+          <i class="ti ti-refresh"></i> Reload
+        </button>
+        <button class="btn btn-primary" id="btnSaveAd">
+          <i class="ti ti-cloud-upload"></i> Save
+        </button>
+      </div>
+
+      <div class="status-msg" id="statusAd"></div>
+    </div>
+
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYZeQsbcbNwKztZIbtx9f0R_nfjZSX01k",
+      authDomain: "bdhack-54132.firebaseapp.com",
+      databaseURL: "https://bdhack-54132-default-rtdb.firebaseio.com",
+      projectId: "bdhack-54132",
+      storageBucket: "bdhack-54132.firebasestorage.app",
+      messagingSenderId: "767198925219",
+      appId: "1:767198925219:web:a520f9a52c4146f1720a16",
+      measurementId: "G-TEFJ37XQ33"
+    };
+
+    let app, db;
+    let appsCache = {};
+    let appConfigCache = {};
+    let adConfigCache = {};
+    let editingId = null;
+    let lastListHash = '';
+
+    const $ = (id) => document.getElementById(id);
+
+    const el = {
+      connBadge: $('connBadge'), connText: $('connText'),
+      headerLogo: $('headerLogo'),
+      loadingOverlay: $('loadingOverlay'), loadingText: $('loadingText'),
+      tabApps: $('tabApps'), tabProfile: $('tabProfile'), tabAd: $('tabAd'),
+      panelApps: $('panelApps'), panelProfile: $('panelProfile'), panelAd: $('panelAd'),
+
+      editId: $('editId'), formTitle: $('formTitle'), formHint: $('formHint'),
+      inAppName: $('inAppName'), inApkUrl: $('inApkUrl'), inSize: $('inSize'),
+      inAndroid: $('inAndroid'), inArch: $('inArch'), inIconUrl: $('inIconUrl'),
+      inPassword: $('inPassword'), btnGenPwd: $('btnGenPwd'),
+      btnSaveApp: $('btnSaveApp'), btnClearForm: $('btnClearForm'), saveBtnLabel: $('saveBtnLabel'),
+      statusApp: $('statusApp'), statusList: $('statusList'),
+      appList: $('appList'), appCountBadge: $('appCountBadge'),
+
+      inPfName: $('inPfName'), inPfLogo: $('inPfLogo'),
+      inPfTelegram: $('inPfTelegram'), inPfWhatsApp: $('inPfWhatsApp'), inPfBio: $('inPfBio'),
+      btnSaveProfile: $('btnSaveProfile'), btnReloadProfile: $('btnReloadProfile'),
+      statusProfile: $('statusProfile'),
+      ppAvatar: $('ppAvatar'), ppName: $('ppName'), ppUser: $('ppUser'),
+
+      inAdActive: $('inAdActive'), inAdTitle: $('inAdTitle'), inAdDesc: $('inAdDesc'),
+      inAdUrl: $('inAdUrl'), inAdImage: $('inAdImage'),
+      btnSaveAd: $('btnSaveAd'), btnReloadAd: $('btnReloadAd'),
+      statusAd: $('statusAd'), adPreviewBox: $('adPreviewBox')
+    };
+
+    /* HELPERS */
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    function setConn(state, text) {
+      el.connBadge.className = 'conn-badge ' + (state || '');
+      el.connText.textContent = text || 'Connecting';
+    }
+
+    function showLoading(t) {
+      el.loadingText.textContent = t || 'Connecting...';
+      el.loadingOverlay.classList.add('show');
+    }
+    function hideLoading() { el.loadingOverlay.classList.remove('show'); }
+
+    function showStatus(target, type, msg) {
+      const icon = { ok: 'ti-circle-check', err: 'ti-alert-circle', info: 'ti-info-circle' }[type] || 'ti-info-circle';
+      target.className = 'status-msg show ' + type;
+      target.innerHTML = `<i class="ti ${icon}"></i><span>${msg}</span>`;
+    }
+    function hideStatus(target) { target.className = 'status-msg'; target.innerHTML = ''; }
+
+    function toast(msg, type = 'ok') {
+      const box = $('toastBox');
+      const t = document.createElement('div');
+      t.className = 'toast-item ' + (type === 'ok' ? 'ok' : '');
+      const icon = type === 'ok' ? 'ti-circle-check' : 'ti-alert-circle';
+      t.innerHTML = `<i class="ti ${icon}"></i><span>${msg}</span>`;
+      box.appendChild(t);
+      requestAnimationFrame(() => t.classList.add('show'));
+      setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 400);
+      }, 2800);
+    }
+
+    function setSaving(btn, saving) {
+      if (saving) {
+        btn.disabled = true;
+        btn.dataset.orig = btn.innerHTML;
+        btn.innerHTML = `<i class="ti ti-loader-2 spin"></i> Saving...`;
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = btn.dataset.orig || 'Save';
+      }
+    }
+
+    function genPassword(len = 10) {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+      let out = '';
+      const arr = new Uint32Array(len);
+      (window.crypto || window.msCrypto).getRandomValues(arr);
+      for (let i = 0; i < len; i++) out += chars[arr[i] % chars.length];
+      return out;
+    }
+
+    /* TABS */
+    function switchTab(t) {
+      el.tabApps.classList.toggle('active', t === 'apps');
+      el.tabProfile.classList.toggle('active', t === 'profile');
+      el.tabAd.classList.toggle('active', t === 'ad');
+      el.panelApps.classList.toggle('hidden', t !== 'apps');
+      el.panelProfile.classList.toggle('hidden', t !== 'profile');
+      el.panelAd.classList.toggle('hidden', t !== 'ad');
+    }
+    el.tabApps.addEventListener('click', () => switchTab('apps'));
+    el.tabProfile.addEventListener('click', () => switchTab('profile'));
+    el.tabAd.addEventListener('click', () => switchTab('ad'));
+
+    /* APP FORM */
+    function resetForm() {
+      editingId = null;
+      el.editId.value = '';
+      el.inAppName.value = '';
+      el.inApkUrl.value = '';
+      el.inSize.value = '';
+      el.inAndroid.value = '';
+      el.inArch.value = '';
+      el.inIconUrl.value = '';
+      el.inPassword.value = '';
+      el.formTitle.textContent = 'Add New APK';
+      el.formHint.textContent = 'Fill in details to add a new app. Set a password to lock downloads.';
+      el.btnSaveApp.innerHTML = `<i class="ti ti-cloud-upload"></i> <span id="saveBtnLabel">Add App</span>`;
+      el.saveBtnLabel = $('saveBtnLabel');
+      hideStatus(el.statusApp);
+    }
+
+    function fillFormForEdit(id, data) {
+      editingId = id;
+      el.editId.value = id;
+      el.inAppName.value = data.name || '';
+      el.inApkUrl.value = data.apkUrl || '';
+      el.inSize.value = data.size || '';
+      el.inAndroid.value = data.android || '';
+      el.inArch.value = data.arch || '';
+      el.inIconUrl.value = data.iconUrl || '';
+      el.inPassword.value = data.password || '';
+      el.formTitle.textContent = 'Edit APK';
+      el.formHint.textContent = 'Editing existing app — saving updates it in place.';
+      el.btnSaveApp.innerHTML = `<i class="ti ti-cloud-upload"></i> <span id="saveBtnLabel">Update App</span>`;
+      el.saveBtnLabel = $('saveBtnLabel');
+      switchTab('apps');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    el.btnClearForm.addEventListener('click', resetForm);
+
+    el.btnGenPwd.addEventListener('click', () => {
+      el.inPassword.value = genPassword(10);
+      toast('Random password generated');
+    });
+
+    async function saveApp() {
+      const data = {
+        name: el.inAppName.value.trim(),
+        apkUrl: el.inApkUrl.value.trim(),
+        size: el.inSize.value.trim(),
+        android: el.inAndroid.value.trim(),
+        arch: el.inArch.value.trim(),
+        iconUrl: el.inIconUrl.value.trim(),
+        password: el.inPassword.value.trim(),
+        updatedAt: Date.now()
+      };
+
+      if (!data.name || !data.apkUrl) {
+        showStatus(el.statusApp, 'err', 'App Name and APK URL are required.');
+        toast('Name & APK URL required', 'err');
+        return;
+      }
+
+      setSaving(el.btnSaveApp, true);
+      hideStatus(el.statusApp);
+
+      try {
+        if (editingId) {
+          await db.ref('apps/' + editingId).update(data);
+          toast('App updated');
+        } else {
+          data.createdAt = Date.now();
+          await db.ref('apps').push(data);
+          toast('New app added');
+        }
+        resetForm();
+        showStatus(el.statusApp, 'ok', 'Saved successfully. Live on the public page.');
+      } catch (err) {
+        console.error(err);
+        showStatus(el.statusApp, 'err', 'Save failed: ' + (err.message || 'Unknown error'));
+        toast('Save failed', 'err');
+      } finally {
+        setSaving(el.btnSaveApp, false);
+      }
+    }
+
+    el.btnSaveApp.addEventListener('click', saveApp);
+
+    /* APP LIST */
+    function renderAppList() {
+      const ids = Object.keys(appsCache);
+      ids.sort((a, b) => (appsCache[b].createdAt || 0) - (appsCache[a].createdAt || 0));
+
+      const hash = ids.map(id => id + '|' + (appsCache[id].updatedAt || appsCache[id].createdAt || 0)).join(';');
+      if (hash === lastListHash) return;
+      lastListHash = hash;
+
+      el.appCountBadge.textContent = `(${ids.length})`;
+
+      if (!ids.length) {
+        el.appList.innerHTML = `
+          <div class="empty-list">
+            <i class="ti ti-package-off"></i>
+            No apps yet. Add your first APK above.
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      for (const id of ids) {
+        const a = appsCache[id];
+        const icon = a.iconUrl || 'https://files.catbox.moe/werqf8.png';
+        const locked = !!(a.password && String(a.password).trim());
+
+        html += `
+          <div class="app-item">
+            <img class="app-icon" src="${escapeHtml(icon)}" alt="icon"
+                 onerror="this.src='https://files.catbox.moe/werqf8.png'">
+            <div class="app-meta">
+              <div class="app-name">
+                ${locked ? '<i class="ti ti-lock lock-icon"></i>' : ''}
+                ${escapeHtml(a.name || 'Untitled')}
+              </div>
+              <div class="app-sub">${escapeHtml(a.size || '—')} • ${escapeHtml(a.android || '—')} • ${escapeHtml(a.arch || '—')}${locked ? ' • 🔒' : ''}</div>
+            </div>
+            <div class="app-actions">
+              <button class="icon-btn" data-edit="${escapeHtml(id)}" title="Edit">
+                <i class="ti ti-edit"></i>
+              </button>
+              <button class="icon-btn del" data-del="${escapeHtml(id)}" title="Delete">
+                <i class="ti ti-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      el.appList.innerHTML = html;
+
+      if (!el.appList._bound) {
+        el.appList.addEventListener('click', async (e) => {
+          const editBtn = e.target.closest('[data-edit]');
+          const delBtn = e.target.closest('[data-del]');
+
+          if (editBtn) {
+            const id = editBtn.getAttribute('data-edit');
+            if (appsCache[id]) fillFormForEdit(id, appsCache[id]);
+          } else if (delBtn) {
+            const id = delBtn.getAttribute('data-del');
+            const a = appsCache[id];
+            if (!a) return;
+            if (!confirm(`Delete "${a.name || 'this app'}"?\n\nThis cannot be undone.`)) return;
+            try {
+              await db.ref('apps/' + id).remove();
+              toast('App deleted');
+            } catch (err) {
+              console.error(err);
+              toast('Delete failed', 'err');
+            }
+          }
+        });
+        el.appList._bound = true;
+      }
+    }
+
+    /* PROFILE FORM */
+    function fillProfileForm(cfg) {
+      cfg = cfg || {};
+      el.inPfName.value = cfg.appName || '';
+      el.inPfLogo.value = cfg.logoUrl || '';
+      el.inPfTelegram.value = cfg.telegram || cfg.username || '';
+      el.inPfWhatsApp.value = cfg.whatsapp || '';
+      el.inPfBio.value = cfg.bio || '';
+      renderProfilePreview();
+    }
+
+    function renderProfilePreview() {
+      const name = el.inPfName.value.trim() || 'HACKING BOT BD';
+      const logo = el.inPfLogo.value.trim() || 'https://files.catbox.moe/werqf8.png';
+      let tg = el.inPfTelegram.value.trim();
+
+      let handle = 'HackingBotBd';
+      if (tg) {
+        if (tg.startsWith('http')) handle = tg.split('/').pop().replace(/^@/, '');
+        else handle = tg.replace(/^@/, '');
+      }
+
+      el.ppAvatar.src = logo;
+      el.ppName.textContent = name;
+      el.ppUser.textContent = '@' + handle;
+    }
+
+    ['inPfName', 'inPfLogo', 'inPfTelegram'].forEach(id => {
+      const node = $(id);
+      if (node) {
+        node.addEventListener('input', renderProfilePreview);
+        node.addEventListener('change', renderProfilePreview);
+      }
+    });
+
+    async function saveProfile() {
+      const tgRaw = el.inPfTelegram.value.trim();
+      let telegram = tgRaw;
+      if (tgRaw && !tgRaw.startsWith('http')) {
+        telegram = 'https://t.me/' + tgRaw.replace(/^@/, '');
+      }
+
+      const data = {
+        appName: el.inPfName.value.trim() || 'HACKING BOT BD',
+        logoUrl: el.inPfLogo.value.trim() || '',
+        telegram: telegram || '',
+        username: tgRaw ? (tgRaw.startsWith('http') ? tgRaw.split('/').pop() : tgRaw.replace(/^@/, '')) : '',
+        whatsapp: el.inPfWhatsApp.value.trim() || '',
+        bio: el.inPfBio.value.trim() || ''
+      };
+
+      setSaving(el.btnSaveProfile, true);
+      hideStatus(el.statusProfile);
+
+      try {
+        await db.ref('app_config').update(data);
+        appConfigCache = { ...appConfigCache, ...data };
+        showStatus(el.statusProfile, 'ok', 'Profile saved. Live on public page.');
+        toast('Profile saved');
+      } catch (err) {
+        console.error(err);
+        showStatus(el.statusProfile, 'err', 'Save failed: ' + (err.message || 'Unknown error'));
+        toast('Save failed', 'err');
+      } finally {
+        setSaving(el.btnSaveProfile, false);
+      }
+    }
+
+    el.btnSaveProfile.addEventListener('click', saveProfile);
+    el.btnReloadProfile.addEventListener('click', () => {
+      fillProfileForm(appConfigCache);
+      hideStatus(el.statusProfile);
+      toast('Profile fields reloaded');
+    });
+
+    /* AD FORM */
+    function fillAdForm(cfg) {
+      cfg = cfg || {};
+      el.inAdActive.checked = !!cfg.active;
+      el.inAdTitle.value = cfg.title || '';
+      el.inAdDesc.value = cfg.desc || '';
+      el.inAdUrl.value = cfg.url || '';
+      el.inAdImage.value = cfg.image || '';
+      renderAdPreview();
+    }
+
+    function renderAdPreview() {
+      const active = el.inAdActive.checked;
+      const title = el.inAdTitle.value.trim();
+      const desc = el.inAdDesc.value.trim();
+      const img = el.inAdImage.value.trim();
+
+      if (!active || (!title && !desc)) {
+        el.adPreviewBox.innerHTML = `<div class="ad-empty">${active ? 'Fill in title / description to preview' : 'Ad is disabled'}</div>`;
+        return;
+      }
+
+      const imgHtml = img
+        ? `<img src="${escapeHtml(img)}" alt="Ad" onerror="this.style.display='none'">`
+        : `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' rx='9' fill='%23ff0033' opacity='0.15'/%3E%3Ctext x='20' y='25' text-anchor='middle' fill='%23ff0033' font-size='14' font-family='monospace'%3EAD%3C/text%3E%3C/svg%3E" alt="Ad">`;
+
+      el.adPreviewBox.innerHTML = `
+        <div class="ad-preview-card">
+          ${imgHtml}
+          <div class="ap-text">
+            <div class="ap-title">${escapeHtml(title || 'Sponsored')}</div>
+            <div class="ap-desc">${escapeHtml(desc || 'Tap to learn more')}</div>
+          </div>
+          <i class="ti ti-arrow-right ap-arrow"></i>
+        </div>
+      `;
+    }
+
+    async function saveAd() {
+      const data = {
+        active: !!el.inAdActive.checked,
+        title: el.inAdTitle.value.trim(),
+        desc: el.inAdDesc.value.trim(),
+        url: el.inAdUrl.value.trim(),
+        image: el.inAdImage.value.trim()
+      };
+
+      if (data.active && !data.url) {
+        showStatus(el.statusAd, 'err', 'Ad click URL is required when ad is enabled.');
+        toast('Ad URL required', 'err');
+        return;
+      }
+
+      setSaving(el.btnSaveAd, true);
+      hideStatus(el.statusAd);
+
+      try {
+        await db.ref('ad_config').set(data);
+        adConfigCache = { ...data };
+        showStatus(el.statusAd, 'ok', 'Ad configuration saved successfully.');
+        toast('Ad config saved');
+      } catch (err) {
+        console.error(err);
+        showStatus(el.statusAd, 'err', 'Save failed: ' + (err.message || 'Unknown error'));
+        toast('Save failed', 'err');
+      } finally {
+        setSaving(el.btnSaveAd, false);
+      }
+    }
+
+    el.btnSaveAd.addEventListener('click', saveAd);
+    el.btnReloadAd.addEventListener('click', () => {
+      fillAdForm(adConfigCache);
+      hideStatus(el.statusAd);
+      toast('Ad fields reloaded');
+    });
+
+    ['inAdActive', 'inAdTitle', 'inAdDesc', 'inAdImage'].forEach(id => {
+      const node = $(id);
+      if (node) {
+        node.addEventListener('input', renderAdPreview);
+        node.addEventListener('change', renderAdPreview);
+      }
+    });
+
+    /* FIREBASE */
+    function initFirebase() {
+      try {
+        app = firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        setConn('ok', 'Connected');
+        hideLoading();
+
+        db.ref('apps').on('value', (snap) => {
+          appsCache = snap.val() || {};
+          renderAppList();
+        }, (err) => {
+          console.warn('apps read error:', err);
+          showStatus(el.statusList, 'err', 'Read error: ' + err.message);
+        });
+
+        db.ref('app_config').on('value', (snap) => {
+          appConfigCache = snap.val() || {};
+          fillProfileForm(appConfigCache);
+          if (appConfigCache.logoUrl) el.headerLogo.src = appConfigCache.logoUrl;
+        }, (err) => {
+          console.warn('app_config read error:', err);
+          showStatus(el.statusProfile, 'err', 'Read error: ' + err.message);
+        });
+
+        db.ref('ad_config').on('value', (snap) => {
+          adConfigCache = snap.val() || {};
+          fillAdForm(adConfigCache);
+        }, (err) => {
+          console.warn('ad_config read error:', err);
+          showStatus(el.statusAd, 'err', 'Read error: ' + err.message);
+        });
+
+        console.log('[Admin] Firebase connected');
+      } catch (err) {
+        console.error('[Admin] Firebase init failed:', err);
+        setConn('err', 'Offline');
+        hideLoading();
+        showStatus(el.statusApp, 'err', 'Firebase init failed: ' + err.message);
+      }
+    }
+
+    function boot() {
+      showLoading('Connecting to Firebase...');
+      setTimeout(initFirebase, 250);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+  </script>
+</body>
+</html>
